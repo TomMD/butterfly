@@ -17,6 +17,7 @@ import org.testng.annotations.Test;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 import static org.mockito.Mockito.*;
 
@@ -76,6 +77,36 @@ public class ButterflyCliTest extends PowerMockTestCase {
         int status = butterflyCli.run().getExitStatus();
 
         Assert.assertEquals(status, 0);
+        verify(facade, times(1)).getRegisteredExtension();
+    }
+
+    /**
+     * To Test listing of extensions and results
+     *
+     * @throws IOException
+     * @throws IllegalAccessException 
+     * @throws InstantiationException 
+     */
+    @Test
+    public void testListingExtensionsWithResults() throws IOException, InstantiationException, IllegalAccessException {
+        when(facade.getRegisteredExtension()).thenReturn(new SampleExtension());
+
+        Assert.assertNotNull(butterflyCli);
+        Assert.assertNotNull(facade);
+
+        String[] arguments = {"-l", "-r", "results.json"};
+        butterflyCli.setOptionSet(arguments);
+
+        ButterflyCliRun run = butterflyCli.run();
+        ButterflyCliExtensionMetaData metaData = run.getExtensionMetaData();
+        SampleExtension sampleExtension = SampleExtension.class.newInstance();
+
+        Assert.assertEquals(run.getExitStatus(), 0);
+        Assert.assertEquals(metaData.getName(), sampleExtension.getClass().getName());
+        Assert.assertEquals(metaData.getDescription(), sampleExtension.getDescription());
+        Assert.assertEquals(metaData.getVersion(), "");
+        Assert.assertEquals(metaData.getTemplates().size(), 2);
+
         verify(facade, times(1)).getRegisteredExtension();
     }
 

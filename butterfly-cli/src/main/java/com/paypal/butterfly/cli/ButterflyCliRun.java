@@ -28,6 +28,8 @@ public class ButterflyCliRun {
     private String logFile;
 
     private String manualInstructionsFile;
+    
+    private ButterflyCliExtensionMetaData extensionMetaData;
 
     // TODO
     // Metrics are not first class citizen yet
@@ -124,5 +126,13 @@ public class ButterflyCliRun {
 
     public String getExceptionMessage() {
         return exceptionMessage;
+    }
+
+    public void setExtensionMetaData(ButterflyCliExtensionMetaData extensionMetaData) {
+        this.extensionMetaData = extensionMetaData;
+    }
+
+    public ButterflyCliExtensionMetaData getExtensionMetaData() {
+        return this.extensionMetaData;
     }
 }
